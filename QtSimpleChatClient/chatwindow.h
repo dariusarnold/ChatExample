@@ -31,5 +31,4 @@ private slots:
     void userLeft(const QString &username);
     void error(QAbstractSocket::SocketError socketError);
 };
-
 #endif // CHATWINDOW_H

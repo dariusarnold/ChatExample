@@ -1,7 +1,21 @@
 project(QtSimpleChatClient LANGUAGES CXX)
+
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
-find_package(Qt5 5.7 COMPONENTS Core Gui Widgets Network REQUIRED)
+set(CMAKE_AUTOUIC ON)
+set(CMAKE_AUTOMOC ON)
+set(CMAKE_AUTORCC ON)
+
+find_package(Qt5 5 COMPONENTS
+    Core
+    Gui
+    Widgets
+    Network
+    Quick
+    REQUIRED
+)
+
 add_executable(SimpleChatClient
+    qml.qrc
     clientmain.cpp
     chatwindow.cpp
     chatclient.cpp
@@ -9,7 +23,14 @@ add_executable(SimpleChatClient
     chatwindow.h
     chatclient.h
 )
-target_link_libraries(SimpleChatClient PRIVATE Qt5::Core Qt5::Gui Qt5::Widgets Qt5::Network)
+
+target_link_libraries(SimpleChatClient PRIVATE
+    Qt5::Core
+    Qt5::Gui
+    Qt5::Widgets
+    Qt5::Network
+    Qt5::Quick
+)
 target_compile_definitions(SimpleChatClient PRIVATE QT_NO_CAST_FROM_ASCII)
 set_target_properties(SimpleChatClient PROPERTIES
 	AUTOMOC ON
