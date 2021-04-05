@@ -44,6 +44,12 @@ GridLayout {
             isConnectedToServer = true
         }
 
+        function onDisconnected() {
+            console.info("Disconnected from server")
+            isConnectedToServer = false
+            isLoggedIn = false
+        }
+
         function onLoggedIn() {
             console.info("Logged in")
             isLoggedIn = true
