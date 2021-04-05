@@ -5,6 +5,7 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QJsonValue>
+#include <QHostAddress>
 
 ChatClient::ChatClient(QObject *parent)
     : QObject(parent)
@@ -18,7 +19,7 @@ ChatClient::ChatClient(QObject *parent)
     connect(m_clientSocket, &QTcpSocket::readyRead, this, &ChatClient::onReadyRead);
     // Forward the error signal, QOverload is necessary as error() is overloaded, see the Qt docs
     connect(m_clientSocket, QOverload<QAbstractSocket::SocketError>::of(&QAbstractSocket::error), this, &ChatClient::error);
-    // Reset the m_loggedIn variable when we disconnec. Since the operation is trivial we use a lambda instead of creating another slot
+    // Reset the m_loggedIn variable when we disconnect. Since the operation is trivial we use a lambda instead of creating another slot
     connect(m_clientSocket, &QTcpSocket::disconnected, this, [this]()->void{m_loggedIn = false;});
 }
 
@@ -110,9 +111,10 @@ void ChatClient::jsonReceived(const QJsonObject &docObj)
     }
 }
 
-void ChatClient::connectToServer(const QHostAddress &address, quint16 port)
+void ChatClient::connectToServer(const QString &address, quint16 port)
 {
-    m_clientSocket->connectToHost(address, port);
+    QHostAddress hostAddress(address);
+    m_clientSocket->connectToHost(hostAddress, port);
 }
 
 void ChatClient::onReadyRead()
@@ -147,4 +149,8 @@ void ChatClient::onReadyRead()
             break;
         }
     }
+}
+
+bool ChatClient::isAddressValid(QString address) {
+    return !QHostAddress(address).isNull();
 }

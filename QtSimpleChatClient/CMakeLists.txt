@@ -1,9 +1,6 @@
 project(QtSimpleChatClient LANGUAGES CXX)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
-set(CMAKE_AUTOUIC ON)
-set(CMAKE_AUTOMOC ON)
-set(CMAKE_AUTORCC ON)
 
 find_package(Qt5 5 COMPONENTS
     Core
@@ -35,6 +32,7 @@ target_compile_definitions(SimpleChatClient PRIVATE QT_NO_CAST_FROM_ASCII)
 set_target_properties(SimpleChatClient PROPERTIES
 	AUTOMOC ON
 	AUTOUIC ON
+        AUTORCC ON
 	CXX_STANDARD 11
 	CXX_STANDARD_REQUIRED ON
 	VERSION "1.0.0"

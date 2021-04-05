@@ -9,10 +9,12 @@ class ChatClient : public QObject
 {
     Q_OBJECT
     Q_DISABLE_COPY(ChatClient)
+
 public:
     explicit ChatClient(QObject *parent = nullptr);
+    Q_INVOKABLE bool isAddressValid(QString address);
 public slots:
-    void connectToServer(const QHostAddress &address, quint16 port);
+    void connectToServer(const QString &address, quint16 port);
     void login(const QString &userName);
     void sendMessage(const QString &text);
     void disconnectFromHost();
