@@ -12,6 +12,7 @@ class ChatClient : public QObject
 
 public:
     explicit ChatClient(QObject *parent = nullptr);
+    Q_PROPERTY(QString userName MEMBER m_userName NOTIFY userNameChanged);
     Q_INVOKABLE bool isAddressValid(QString address);
 public slots:
     void connectToServer(const QString &address, quint16 port);
@@ -29,9 +30,12 @@ signals:
     void error(QAbstractSocket::SocketError socketError);
     void userJoined(const QString &username);
     void userLeft(const QString &username);
+    void userNameChanged();
 private:
     QTcpSocket *m_clientSocket;
     bool m_loggedIn;
+    // Save username that was used for login
+    QString m_userName;
     void jsonReceived(const QJsonObject &doc);
 };
 
