@@ -12,6 +12,7 @@ int main(int argc, char *argv[])
     // Singleton instances have to be registered before loading main.qml, otherwise the
     // qml module (for the singleton) cannot be found
     qmlRegisterSingletonInstance("ChatApp.ChatClient", 1, 0, "ChatClient", chatClient.get());
+    qmlRegisterSingletonInstance("ChatApp.ChatMessages", 1, 0, "ChatMessages", chatClient->model());
     //qmlRegisterType<QHostAddress>("Qt.Types", 1, 0, "QHostAddress");
     QQmlApplicationEngine engine;
     const auto url = QUrl(QStringLiteral("qrc:/main.qml"));

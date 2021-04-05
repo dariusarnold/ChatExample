@@ -4,5 +4,6 @@
         <file>Chat.qml</file>
         <file>ServerAddressPopup.qml</file>
         <file>UserNamePopup.qml</file>
+        <file>MessageDelegate.qml</file>
     </qresource>
 </RCC>

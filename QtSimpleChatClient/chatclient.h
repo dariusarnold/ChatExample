@@ -3,8 +3,11 @@
 
 #include <QObject>
 #include <QTcpSocket>
+#include "chatmessages.h"
+
 class QHostAddress;
 class QJsonDocument;
+
 class ChatClient : public QObject
 {
     Q_OBJECT
@@ -14,6 +17,7 @@ public:
     explicit ChatClient(QObject *parent = nullptr);
     Q_PROPERTY(QString userName MEMBER m_userName NOTIFY userNameChanged);
     Q_INVOKABLE bool isAddressValid(QString address);
+    QAbstractItemModel* model();
 public slots:
     void connectToServer(const QString &address, quint16 port);
     void login(const QString &userName);
@@ -32,11 +36,14 @@ signals:
     void userLeft(const QString &username);
     void userNameChanged();
 private:
+    void addMessageToModel(const QString& sender, const QString& text);
     QTcpSocket *m_clientSocket;
     bool m_loggedIn;
     // Save username that was used for login
     QString m_userName;
     void jsonReceived(const QJsonObject &doc);
+    // Store chat messages
+    ChatMessageModel m_messages;
 };
 
 #endif // CHATCLIENT_H

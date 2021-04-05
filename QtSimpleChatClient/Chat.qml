@@ -2,6 +2,7 @@ import QtQuick 2.12
 import QtQuick.Layouts 1.12
 import QtQuick.Controls 2.12
 import ChatApp.ChatClient 1.0
+import ChatApp.ChatMessages 1.0
 
 GridLayout {
     columns: 2
@@ -70,6 +71,7 @@ GridLayout {
         Layout.columnSpan: 2
         Layout.fillWidth: true
         onClicked: serverAddressSelection.show()
+        visible: !isConnectedToServer
     }
     Button {
         text: qsTr("Disconnect")
@@ -83,7 +85,15 @@ GridLayout {
         Layout.columnSpan: 2
         Layout.fillWidth: true
         Layout.fillHeight: true
-        delegate: Text {}
+        Layout.leftMargin: 8
+        Layout.rightMargin: 8
+        delegate: MessageDelegate {
+            messageText: model.messageText
+            author: model.author
+            displayRight: model.author === ChatClient.userName
+        }
+        spacing: 8
+        model: ChatMessages
     }
     TextField {
         id: messageInput

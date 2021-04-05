@@ -57,6 +57,7 @@ void ChatClient::sendMessage(const QString &text)
     message[QStringLiteral("text")] = text;
     // send the JSON using QDataStream
     clientStream << QJsonDocument(message).toJson();
+    addMessageToModel(m_userName, text);
 }
 
 void ChatClient::disconnectFromHost()
@@ -98,6 +99,7 @@ void ChatClient::jsonReceived(const QJsonObject &docObj)
             return; // the sender field was invalid so we ignore
         // we notify a new message was received via the messageReceived signal
         emit messageReceived(senderVal.toString(), textVal.toString());
+        addMessageToModel(senderVal.toString(), textVal.toString());
     } else if (typeVal.toString().compare(QLatin1String("newuser"), Qt::CaseInsensitive) == 0) { // A user joined the chat
         // we extract the username of the new user
         const QJsonValue usernameVal = docObj.value(QLatin1String("username"));
@@ -113,6 +115,10 @@ void ChatClient::jsonReceived(const QJsonObject &docObj)
         // we notify of the user disconnection the userLeft signal
         emit userLeft(usernameVal.toString());
     }
+}
+
+void ChatClient::addMessageToModel(const QString& sender, const QString& message) {
+    m_messages.addMessage(sender, message);
 }
 
 void ChatClient::connectToServer(const QString &address, quint16 port)
@@ -157,4 +163,8 @@ void ChatClient::onReadyRead()
 
 bool ChatClient::isAddressValid(QString address) {
     return !QHostAddress(address).isNull();
+}
+
+QAbstractItemModel* ChatClient::model() {
+    return &m_messages;
 }

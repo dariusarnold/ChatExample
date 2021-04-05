@@ -19,6 +19,8 @@ add_executable(SimpleChatClient
     chatwindow.ui
     chatwindow.h
     chatclient.h
+    chatmessages.cpp
+    chatmessages.h
 )
 
 target_link_libraries(SimpleChatClient PRIVATE
