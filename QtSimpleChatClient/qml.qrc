@@ -2,5 +2,6 @@
     <qresource prefix="/">
         <file>main.qml</file>
         <file>Chat.qml</file>
+        <file>ServerAddressPopup.qml</file>
     </qresource>
 </RCC>

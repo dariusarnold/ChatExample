@@ -42,17 +42,10 @@ GridLayout {
         text: qsTr("Connect")
         Layout.columnSpan: 2
         Layout.fillWidth: true
-        property var serverAddressSelection: Dialog {
-            modal: true
-            title: qsTr("Choose a server")
-            standardButtons: Dialog.Cancel | Dialog.Ok
-            TextField {
-                id: input
-                text: "127.0.0.1"
-            }
-            onAccepted: connectToServer(input.text)
+        property var serverAddressSelection: ServerAddressPopup {
+            onAccepted: connectToServer(address)
         }
-        onClicked: serverAddressSelection.open()
+        onClicked: serverAddressSelection.show()
     }
     ListView {
         Layout.columnSpan: 2
