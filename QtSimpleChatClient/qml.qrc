@@ -3,5 +3,6 @@
         <file>main.qml</file>
         <file>Chat.qml</file>
         <file>ServerAddressPopup.qml</file>
+        <file>UserNamePopup.qml</file>
     </qresource>
 </RCC>

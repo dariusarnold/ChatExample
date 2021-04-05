@@ -6,22 +6,34 @@ import ChatApp.ChatClient 1.0
 GridLayout {
     columns: 2
 
+    // Send on input textfield clicked, now send text to server
     signal sendClicked(string text)
+    // Try to connect to server with address
     signal connectToServer(string address)
+    // Show popup prompting for username after server connection
+    signal showUsernamePopup
+    // Tro to login to server with given username
+    signal loginToServer(string username)
+    signal disconnectFromServer
     property bool isConnectedToServer: false
+    property bool isLoggedIn: false
 
-    onConnectToServer: {
-        var addressValid = ChatClient.isAddressValid(address)
-        if (!addressValid) {
-            console.warn("Invalid address")
-            return
+    onSendClicked: messageInput.clear()
+    onShowUsernamePopup: userNameSelection.show()
+
+    property var serverAddressSelection: ServerAddressPopup {
+        onAccepted: {
+            console.info("Connecting to %1".arg(address))
+            close()
+            connectToServer(address)
         }
-        ChatClient.connectToServer(address, 1967)
     }
 
-    onSendClicked: {
-        ChatClient.sendMessage(text)
-        messageInput.clear()
+    property var userNameSelection: UserNamePopup {
+        onAccepted: {
+            console.info("Logging in as %1".arg(username))
+            loginToServer(username)
+        }
     }
 
     Connections {
@@ -32,9 +44,18 @@ GridLayout {
             isConnectedToServer = true
         }
 
+        function onLoggedIn() {
+            console.info("Logged in")
+            isLoggedIn = true
+        }
+
         function onError(socketError) {
             console.warn("Connection failed (SocketError %1)".arg(socketError))
             isConnectedToServer = false
+        }
+
+        function onLoginError(reason) {
+            console.warn("Login failed: %1".arg(reason))
         }
     }
 
@@ -42,11 +63,16 @@ GridLayout {
         text: qsTr("Connect")
         Layout.columnSpan: 2
         Layout.fillWidth: true
-        property var serverAddressSelection: ServerAddressPopup {
-            onAccepted: connectToServer(address)
-        }
         onClicked: serverAddressSelection.show()
     }
+    Button {
+        text: qsTr("Disconnect")
+        Layout.columnSpan: 2
+        Layout.fillWidth: true
+        onClicked: disconnectFromServer()
+        visible: isConnectedToServer
+    }
+
     ListView {
         Layout.columnSpan: 2
         Layout.fillWidth: true
@@ -58,12 +84,13 @@ GridLayout {
         Layout.fillWidth: true
         Layout.leftMargin: 8
         Layout.rightMargin: 8
-        enabled: isConnectedToServer
+        enabled: isConnectedToServer && isLoggedIn
     }
     Button {
         text: qsTr("Send")
         Layout.rightMargin: 8
         onClicked: sendClicked(messageInput.text)
         enabled: messageInput.text.length > 0 && isConnectedToServer
+                 && isLoggedIn
     }
 }

@@ -36,6 +36,8 @@ void ChatClient::login(const QString &userName)
         message[QStringLiteral("username")] = userName;
         // send the JSON using QDataStream
         clientStream << QJsonDocument(message).toJson(QJsonDocument::Compact);
+    } else {
+        emit loginError(QStringLiteral("Socket not connected (state %1)").arg(m_clientSocket->state()));
     }
 }
 

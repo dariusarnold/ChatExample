@@ -5,13 +5,13 @@ import QtQuick.Layouts 1.12
 
 Window {
     id: popup
-    // Accepted pressed by user, try to connect to address
-    signal accepted(string address)
+    // Accepted pressed by user, try to login with username
+    signal accepted(string username)
 
     // Remove minimze/maximize buttons
     flags: Qt.Dialog | Qt.CustomizeWindowHint | Qt.WindowTitleHint | Qt.WindowCloseButtonHint
     modality: Qt.ApplicationModal
-    title: qsTr("Choose a server")
+    title: qsTr("Choose a name")
     minimumHeight: layout.childrenRect.height
     minimumWidth: layout.childrenRect.width
     ColumnLayout {
@@ -20,8 +20,8 @@ Window {
             Layout.preferredHeight: 8
         }
         TextField {
-            id: input
-            text: "127.0.0.1"
+            id: username
+            placeholderText: qsTr("Name")
             Layout.alignment: Qt.AlignHCenter
         }
         DialogButtonBox {
@@ -30,7 +30,7 @@ Window {
                 popup.close()
             }
             onAccepted: {
-                popup.accepted(input.text)
+                popup.accepted(username.text)
                 popup.close()
             }
         }
